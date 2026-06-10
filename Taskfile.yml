@@ -1,0 +1,27 @@
+version: "3"
+
+tasks:
+  dev:
+    desc: Run the dev server
+    cmds:
+      - pnpm dev
+
+  build:
+    desc: Production build
+    cmds:
+      - pnpm build
+
+  lint:
+    desc: Lint the codebase
+    cmds:
+      - pnpm lint
+
+  deploy:
+    desc: Deploy a preview to Vercel (muehlemann-popp team)
+    cmds:
+      - vercel
+
+  deploy:prod:
+    desc: Deploy to production on Vercel (muehlemann-popp team)
+    cmds:
+      - vercel --prod

@@ -1,26 +1,21 @@
 @import "tailwindcss";
+@import "@heroui/styles";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* m+p brand: mustard accent instead of HeroUI's default blue */
+  --accent: hsl(41, 75%, 50%);
+  --accent-foreground: #1a1a1a;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --mp-mustard: hsl(41, 75%, 61%);
+  --mp-mustard-light: hsl(41, 75%, 75%);
+  --mp-mustard-bg: hsl(41, 75%, 93%);
+  --mp-mustard-bg-soft: hsl(41, 75%, 96%);
+  --mp-mustard-dark: hsl(41, 75%, 45%);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-family: var(--font-manrope), "Segoe UI", "Helvetica Neue", Arial,
+    sans-serif;
 }
