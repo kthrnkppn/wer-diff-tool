@@ -23,6 +23,18 @@ type PanelProps = {
   onFile: (name: string, text: string) => void;
 };
 
+async function readUploadedFile(file: File): Promise<string> {
+  if (file.name.toLowerCase().endsWith(".docx")) {
+    // Dynamic import keeps mammoth out of the initial bundle
+    const mammoth = await import("mammoth");
+    const result = await mammoth.extractRawText({
+      arrayBuffer: await file.arrayBuffer(),
+    });
+    return result.value;
+  }
+  return extractText(file.name, await file.text());
+}
+
 function DocumentPanel({
   title,
   description,
@@ -32,6 +44,7 @@ function DocumentPanel({
   onFile,
 }: PanelProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const wordCount = value.split(/\s+/).filter(Boolean).length;
 
   return (
@@ -47,13 +60,17 @@ function DocumentPanel({
         <input
           ref={fileInputRef}
           type="file"
-          accept=".txt,.srt,.vtt,.md,text/plain"
+          accept=".txt,.srt,.vtt,.md,.docx,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           className="hidden"
           onChange={async (e) => {
             const file = e.target.files?.[0];
             if (!file) return;
-            const text = await file.text();
-            onFile(file.name, extractText(file.name, text));
+            setFileError(null);
+            try {
+              onFile(file.name, await readUploadedFile(file));
+            } catch {
+              setFileError(`Could not read ${file.name} — is it a valid file?`);
+            }
             e.target.value = "";
           }}
         />
@@ -61,12 +78,13 @@ function DocumentPanel({
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Paste text here or upload a .txt / .srt / .vtt file…"
+        placeholder="Paste text here or upload a .txt / .docx / .srt / .vtt file…"
         spellCheck={false}
         className="h-56 w-full resize-y px-5 py-4 font-mono text-[13px] leading-relaxed text-[#1a1a1a] outline-none placeholder:text-gray-400 focus:bg-[hsl(41,75%,98%)]"
       />
       <div className="flex items-center justify-between border-t border-gray-100 px-5 py-2 text-xs text-[#718096]">
         <span>{wordCount.toLocaleString()} words</span>
+        {fileError && <span className="text-red-700">{fileError}</span>}
         {fileName && (
           <span className="rounded-full bg-[hsl(41,75%,93%)] px-2 py-0.5 text-[#2d3748]">
             {fileName}

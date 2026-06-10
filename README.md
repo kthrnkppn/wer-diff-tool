@@ -18,6 +18,8 @@ word-level diff.
   transcript).
 - `.srt` / `.vtt` uploads are cleaned automatically (cue numbers, timestamps,
   and tags are stripped).
+- `.docx` uploads are converted to plain text in the browser via
+  [mammoth](https://github.com/mwilliamson/mammoth.js).
 
 Everything runs client-side; no documents leave the browser.
 
