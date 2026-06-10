@@ -36,4 +36,4 @@ task deploy   # preview deploy to Vercel (muehlemann-popp team)
 
 ---
 
-_Last updated: 2026-06-10 · ecc7d95_
+_Last updated: 2026-06-10 · 5be65d3_
